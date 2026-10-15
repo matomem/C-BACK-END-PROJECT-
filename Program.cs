@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();\napp.Use(async (context, next) =>
 {
-    if (context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase))
+    if ((context.Request.Path.StartsWithSegments("/account", StringComparison.OrdinalIgnoreCase) || context.Request.Path.StartsWithSegments("/order", StringComparison.OrdinalIgnoreCase)))
     {
         context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
         await context.Response.WriteAsJsonAsync(new { error = "API disabled until authenticated account ownership is implemented." });
