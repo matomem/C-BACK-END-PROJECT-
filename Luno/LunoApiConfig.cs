@@ -1,7 +1,8 @@
-namespace CryptoExchange.Backend.Luno
+namespace CryptoExchange.Backend.Luno;
+
+public sealed class LunoApiConfig
 {
-    public class LunoApiConfig
-    {
-        // Configuration properties will go here (e.g., ApiKey, ApiSecret, BaseUrl)
-    }
-} 
+    public string ApiKey { get; set; } = string.Empty;
+    public string ApiSecret { get; set; } = string.Empty;
+    public string BaseUrl { get; set; } = "https://api.luno.com";
+}

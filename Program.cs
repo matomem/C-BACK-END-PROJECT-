@@ -8,9 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();\n// Private account and order endpoints must not be publicly exposed without authentication.\nbuilder.Services.AddAuthorization();
 
 // Configure Luno API settings
 builder.Services.Configure<LunoApiConfig>(builder.Configuration.GetSection("LunoApi"));
+
+builder.Services.AddSingleton(sp => sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<LunoApiConfig>>().Value);
 
 // Register HttpClient and configure it for Luno API
 builder.Services.AddHttpClient<LunoApiClient>((serviceProvider, client) =>
@@ -34,7 +37,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection();\napp.Use(async (context, next) =>
+{
+    if ((context.Request.Path.StartsWithSegments("/account", StringComparison.OrdinalIgnoreCase) || context.Request.Path.StartsWithSegments("/order", StringComparison.OrdinalIgnoreCase)))
+    {
+        context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+        await context.Response.WriteAsJsonAsync(new { error = "API disabled until authenticated account ownership is implemented." });
+        return;
+    }
+    await next();
+});
 
 // Map controllers
 app.MapControllers();

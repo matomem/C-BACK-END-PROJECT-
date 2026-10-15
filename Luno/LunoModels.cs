@@ -16,13 +16,6 @@ namespace CryptoExchange.Backend.Luno
     //     public string status { get; set; }
     // }
 
-    public class LunoApiConfig
-    {
-        // Configuration properties will go here (e.g., ApiKey, ApiSecret, BaseUrl)
-        public string ApiKey { get; set; }
-        public string ApiSecret { get; set; }
-        public string BaseUrl { get; set; }
-    }
 
     public class Ticker
     {
