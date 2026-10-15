@@ -13,6 +13,8 @@ builder.Services.AddControllers();
 // Configure Luno API settings
 builder.Services.Configure<LunoApiConfig>(builder.Configuration.GetSection("LunoApi"));
 
+builder.Services.AddSingleton(sp => sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<LunoApiConfig>>().Value);
+
 // Register HttpClient and configure it for Luno API
 builder.Services.AddHttpClient<LunoApiClient>((serviceProvider, client) =>
 {
