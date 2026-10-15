@@ -37,10 +37,19 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();\napp.UseAuthorization();
+app.UseHttpsRedirection();\napp.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+        await context.Response.WriteAsJsonAsync(new { error = "API disabled until authenticated account ownership is implemented." });
+        return;
+    }
+    await next();
+});
 
 // Map controllers
-app.MapControllers().RequireAuthorization();
+app.MapControllers();
 
 var summaries = new[]
 {
