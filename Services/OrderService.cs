@@ -13,7 +13,7 @@ namespace CryptoExchange.Backend.Services
             _lunoApiClient = lunoApiClient;
         }
 
-        public async Task<List<Order>>> GetUserOrdersAsync(string state = "PENDING", string pair = null)
+        public async Task<List<Order>?> GetUserOrdersAsync(string state = "PENDING", string? pair = null)
         {
             var ordersResponse = await _lunoApiClient.ListOrdersAsync(state, pair);
             return ordersResponse?.Orders; // Return the list of orders, handle potential null response
