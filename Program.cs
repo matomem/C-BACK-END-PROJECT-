@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
+builder.Services.AddControllers();\n// Private account and order endpoints must not be publicly exposed without authentication.\nbuilder.Services.AddAuthorization();
 
 // Configure Luno API settings
 builder.Services.Configure<LunoApiConfig>(builder.Configuration.GetSection("LunoApi"));
@@ -37,10 +37,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection();\napp.UseAuthorization();
 
 // Map controllers
-app.MapControllers();
+app.MapControllers().RequireAuthorization();
 
 var summaries = new[]
 {
